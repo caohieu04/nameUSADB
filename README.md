@@ -1,4 +1,4 @@
-# Optimize "Naming in the USA Database" with Trie
+# Optimize "USA Birth Name Database" with Trie
 
 ## About
   Inspired by Hussein Nasser's video, I created my first mini-project in Go to optimzie regex-like query with 
