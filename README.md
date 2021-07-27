@@ -19,8 +19,9 @@
   
   
 ## Misc
+<pre>
 Checkout the video [Database Indexing Explained (with PostgreSQL)](https://www.youtube.com/watch?v=-qNSXK7s7_w) - 
-
     and his channel [Hussein Nasser](https://www.youtube.com/c/HusseinNasser-software-engineering)
+</pre>
 
 Checkout project's diary at [doc.txt](./doc.txt)
