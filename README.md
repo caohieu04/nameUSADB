@@ -15,5 +15,3 @@
 
 ## Inspired by 
 [Database Indexing Explained (with PostgreSQL)](https://www.youtube.com/watch?v=-qNSXK7s7_w) - Hussein Nasser
-
-He is a great teacher.
