@@ -10,6 +10,7 @@
 ![Query with trie](./query_wtrie.png)
 
   Compares to 10 ms query from database.
+  
 ![Query with database](./query_pg.png)
 
   Checkout project's diary at [doc.txt](./doc.txt)
