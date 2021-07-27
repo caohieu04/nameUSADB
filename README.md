@@ -8,11 +8,11 @@
 ## Performance
   * With the use of Trie, I achieved 4X performance of 2.5 ms with Trie:
  
-    * ![Query with trie](./query_wtrie.png)
+      ![Query with trie](./query_wtrie.png)
 
   * Compares to 10 ms query from database.
   
-    * ![Query with database](./query_pg.png)
+      ![Query with database](./query_pg.png)
 
 
 
