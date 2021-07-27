@@ -1,110 +1,72 @@
 package main
 
 import (
-	"encoding/csv"
+	"bufio"
+	"errors"
 	"fmt"
-	"log"
 	"os"
-	"strconv"
+	"reflect"
 	"time"
 )
 
-func readCsvFile(filePath string) [][]string {
-	f, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal("Unable to read input file "+filePath, err)
-	}
-	defer f.Close()
+type stubMapping map[string]interface{}
 
-	csvReader := csv.NewReader(f)
-	records, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatal("Unable to parse file as CSV for "+filePath, err)
-	}
+var StubStorage = stubMapping{}
 
-	return records
-}
-func writeCsvFile(filePath string, records [][]string) {
-	f, err := os.Create("employee.csv")
-	if err != nil {
-		log.Fatal("Unable to create file"+filePath, err)
+func Call(funcName string, params ...interface{}) (result interface{}, err error) {
+	f := reflect.ValueOf(StubStorage[funcName])
+	if len(params) != f.Type().NumIn() {
+		err = errors.New("the number of params is out of index")
+		return
 	}
-	f.Close()
-
-	csvWriter := csv.NewWriter(f)
-
-	for _, r := range records {
-		_ = csvWriter.Write(r)
+	in := make([]reflect.Value, len(params))
+	for k, param := range params {
+		in[k] = reflect.ValueOf(param)
 	}
-	csvWriter.Flush()
+	fmt.Println("==Calling ", funcName)
+	var res []reflect.Value = f.Call(in)
+	result = res[0].Interface()
+	fmt.Println("====================")
+	return
 }
 
-type Row struct {
-	StateCode   string
-	Sex         byte
-	YearOfBirth int
-	Name        string
-	Number      int
-}
+var records [][]string
 
-func NewRow(s []string) Row {
-	StateCode := &s[0]
-	Sex := s[1][0]
-	YearOfBirth, _ := strconv.ParseInt(s[2], 0, 32)
-	Name := &s[3]
-	Number, _ := strconv.ParseInt(s[4], 0, 32)
-	return Row{*StateCode, Sex, int(YearOfBirth), *Name, int(Number)}
-}
-
-func findByName(t string) []int {
-	u := &Root
-	for _, char := range t {
-		val, ok := u.to[char]
-		if !ok {
-			fmt.Println("!!Find")
-			return nil
-		}
-		u = val
-	}
-	return u.ids
-}
-
-func findByNameAndYearOfBirth(t string, a int, records [][]string) []int {
-	ids := findByName(t)
-	fmt.Println("Length of findByName", len(ids))
-	re := []int{}
-	for _, id := range ids {
-		s := records[id]
-		YearOfBirth, _ := strconv.Atoi(s[2])
-		// fmt.Println(YearOfBirth, s[2])
-		if YearOfBirth == a {
-			re = append(re, id)
-		}
-	}
-	return re
-}
-func main() {
-
-	records := readCsvFile("name.csv")
-	strs := []string{}
+func readNameCSV() string {
+	defer elapsed(time.Now(), "readNameCSV")
+	records = readCsvFile("name.csv")
 	fmt.Println("Length of records", len(records))
-	for _, r := range records[1:] {
-		strs = append(strs, r[3])
-	}
-	start := time.Now()
+	return "OK"
+}
 
-	makeTrie(strs)
-	fmt.Println(time.Since(start).String())
+var allRows []Row
 
-	start = time.Now()
-	re := findByName("M")
-	fmt.Println(time.Since(start).String())
-
-	start = time.Now()
-	re = findByNameAndYearOfBirth("M", 2001, records)
-	fmt.Println(time.Since(start).String())
-
+func main() {
 	if false {
-		fmt.Println(re)
+		StubStorage = map[string]interface{}{
+			"readNameCSV":   readNameCSV,
+			"buildTrie":     buildTrie,
+			"dbCreateTable": dbCreateTable,
+		}
+
+		var line string
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			line = scanner.Text()
+			res, _ := Call(line)
+			if false {
+				fmt.Println(res)
+			}
+		}
 	}
+	// readNameCSV()
+	dbConnect()
+	// dbCreateTable()
+	allRows = dbGetAll()
+	dbBuildTrie(allRows)
+	q1 := findByNameAndYearOfBirth("nn", 2001)
+	fmt.Println(q1[0])
+	q2 := dbFindByNameAndYearOfBirth("Anna", 2001)
+	fmt.Println(q2[0])
+	defer db.Close()
 }

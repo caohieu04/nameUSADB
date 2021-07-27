@@ -1,0 +1,54 @@
+From "https://www.youtube.com/watch?v=-qNSXK7s7_w&t=169s" uploaded by Hussein Nasser, even though we create index for name column, running "select id, name from employees where name like '%ZA%'" took 1318.602 ms
+so I think let's do a mini project implement suffix tree increase performance even more, but suffix trie is compressed, it's hard to do regex-like query
+so I comeback with naive trie of all suffixes given the fact that name is quite short. Tt performs better with only 230 ms with cold start of 2s reading from csv file, 8s from building trie.
+It shouldn't be a problem if the server is actively running though. It doesn't support update and create query yet, but it should be logically easy to implement.
+Obviously, reading from csv file to build trie is enough, still, I want to test if reading from postgres will be faster.
+
+Entity format:
+type Row struct {
+	StateCode   string
+	Sex         byte
+	YearOfBirth int
+	Name        string
+	Number      int
+	Id          int `pg:",pk"`
+}
+
+8:40 PM July 26, learning goroutines with the idea of writting concurrently to database
+If I import the normal way, it'd take from ~15 mins, but we are engineer right, we spend 5 hours to automate 15-minute task, worth it though
+
+11:00 PM July 26, after try lots of solution from stackoverflow, making the channel, add wait group, defer somethings, but it doesn't work
+
+3:34 AM July 27,
+[error][postgres]["duplicate key value violates unique constraint"]: writting too fast with too much num of connections to postgres make it out of sync 
+  -> limit num of connections
+At first I assume it some kind of go routine making repetitive Insert to database, but now i know it's about "your sequence might be out of sync and that you have to manually bring it back in sync."
+So the code isn't wrong, I waste so much time on this. Let's sync
+
+4:05 AM July 27, I did it !! It "concurrently" now, for sure it's slower than reading from csv 
+
+5:13 AM July 27, 
+After all those errors:
+[bug][postgres]["slow insert"]: round trip of insert
+  -> batch it or remove "concurrently", bulk insert
+  [error][postgres]["EOF"]: too much insert in bulk insert
+    -> split it by chunks
+    -> result: 42s for 5mil rows
+
+5:42 AM July 27,
+Copy from csv to postgres took 3 seconds LOL
+
+6:25 AM July 27,
+I can now query from DB and build Trie. Average build tree time is 7s, saving the whopping 1s !
+With query("Mary", 2001) on database takes 182 ms, after indexing name takes 40ms, 
+After indexing year_of_birth takes 4 ms, same as custom trie 
+-> 
+With old method, read from files 2s -> build trie 8s
+With new method, read from database 5s -> build trie 7s
+
+7:17 AM July 27,
+Query(LIKE "%nn%", 2001) on database takes 10 ms, with every columns's indexed
+While custom function takes 120 ms, how is that possible !!
+Checking again, I was using "concurrent" things, after delete all wait group stuff, mc queen's running 2.5 ms boi, it's fast
+
+[Conclusion]: Goroutines does boost performance a lot, but have to understand thoroughly, it's double-edged blade
