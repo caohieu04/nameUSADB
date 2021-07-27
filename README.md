@@ -7,4 +7,4 @@
   
 ![Query with trie](./query_trie.png)
 
-<!-- ![Query with database](./query_db.png) -->
+![Query with database](./query_pg.png)
