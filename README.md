@@ -14,4 +14,5 @@
 ![Query with database](./query_pg.png)
 
 ## Inspired by 
-[Database Indexing Explained (with PostgreSQL)](https://www.youtube.com/watch?v=-qNSXK7s7_w) [Hussein Nasser](https://www.youtube.com/channel/UC_ML5xP23TOWKUcc-oAE_Eg)
+[Database Indexing Explained (with PostgreSQL)](https://www.youtube.com/watch?v=-qNSXK7s7_w) - Hussein Nasser
+He is a great teacher.
