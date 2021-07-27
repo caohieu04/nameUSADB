@@ -5,6 +5,6 @@
   With the use of Trie, I achieved 4X performance of 2.5 ms compares to 10 ms.
   Checkout project's diary at [doc.txt](./doc.txt)
   
-![Query with trie](./query_trie.png)
+![Query with trie](./query_wtrie.png)
 
 ![Query with database](./query_pg.png)
