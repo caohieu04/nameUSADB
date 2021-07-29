@@ -9,7 +9,7 @@
  
       ![Query with trie](./query_wtrie.png)
 
-  * Compares to 10 ms query from database.
+  * Compares to 10 ms query from database (Indexes created)
   
       ![Query with database](./query_pg.png)
 
