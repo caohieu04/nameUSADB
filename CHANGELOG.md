@@ -9,15 +9,15 @@
 ==========================================
 
 💚 Added:
-    * Added `Siege` class, now can send and receive bulk of the requests (3.000 queries per seconds)
-    * Added `Route` class, a simple APIs created by `mux` package
+  * Added `Siege` class, now can send and receive bulk of the requests (3.000 queries per seconds)
+  * Added `Route` class, a simple APIs created by `mux` package
 
 🧡 Changed:
-    * Moved all excepts main.go to package utils
-    * Moved ./name.csv to ./data/name.csv
+  * Moved all excepts main.go to package utils
+  * Moved ./name.csv to ./data/name.csv
 
 ❤️ Removed:
-    * Auto get function's name (unnecessary)
+  * Auto get function's name (unnecessary)
 
 &nbsp;
 &nbsp;
@@ -26,5 +26,5 @@
 ==========================================
 
 💚 Added:
-    * Created database by bulk importing from name.csv and created indexes on `name` columns
-    * Built `Trie` for fast retrieving
+  * Created database by bulk importing from name.csv and created indexes on `name` columns
+  * Built `Trie` for fast retrieving
