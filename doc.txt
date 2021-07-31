@@ -36,7 +36,7 @@ After all those errors:
     -> result: 42s for 5mil rows
 
 5:42 AM July 27,
-Copy from csv to postgres took 3 seconds LOL
+Copy from csv to postgres took 3 seconds
 
 6:25 AM July 27,
 I can now query from DB and build Trie. Average build tree time is 7s, saving the whopping 1s !
@@ -52,3 +52,7 @@ While custom function takes 120 ms, how is that possible !!
 Checking again, I was using "concurrent" things, after delete all wait group stuff, mc queen's running 2.5 ms boi, it's fast
 
 [Conclusion]: Goroutines does boost performance a lot, but have to understand thoroughly, it's double-edged blade
+
+2:37 AM August 1,
+Learnt how to control goroutines with channels
+Performance gain is parabola graph, best at 24 workers (30000 queries / 10s) and getting worse as increasing number of workers (26000 queries / 10s)

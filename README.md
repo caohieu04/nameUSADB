@@ -7,11 +7,11 @@
 ## Performance
   * With the use of Trie on `name` field, I achieved faster performance of 2.5 ms:
  
-      ![Query with trie](./query_wtrie.png)
+      ![Query with trie](./data/query_wtrie.png)
 
   * Compares to 10 ms query from database (Indexes created)
   
-      ![Query with database](./query_pg.png)
+      ![Query with database](./data/query_pg.png)
 
 
 

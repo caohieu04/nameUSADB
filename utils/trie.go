@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -76,9 +76,9 @@ func findByName(t string) []int {
 }
 
 func findByNameAndYearOfBirth(t string, a int) []Row {
-	defer elapsed(time.Now(), "findByNameAndYearOfBirth")
+	// defer Elapsed(time.Now(), "findByNameAndYearOfBirth\n")
 	ids := findByName(t)
-	fmt.Println("Length of findByName", len(ids))
+	// fmt.Println("len(ids): ", len(ids))
 
 	re := []Row{}
 	for _, id := range ids {
@@ -111,29 +111,6 @@ func buildTrie() string {
 
 	if false {
 		fmt.Println(re)
-	}
-	return "OK"
-}
-func dbBuildTrie(rows []Row) string {
-	defer elapsed(time.Now(), "dbBuildTrie")
-	all := []struct {
-		string
-		int
-	}{}
-	for _, row := range rows {
-		for j, _ := range row.Name {
-			all = append(all, struct {
-				string
-				int
-			}{row.Name[j:], row.Id})
-		}
-	}
-
-	for _, s := range all {
-		start := &Root
-		for _, char := range s.string {
-			start = AddNodeTrie(start, char, s.int)
-		}
 	}
 	return "OK"
 }

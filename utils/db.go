@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -30,7 +30,7 @@ func saveToDB(l int, r int) {
 	}
 }
 func writeFromCSVtoDB() {
-	defer elapsed(time.Now(), "writeFromCSVtoDB")
+	defer Elapsed(time.Now(), "writeFromCSVtoDB")
 	fmt.Println("Writing ", curFuncName())
 	max := 10
 	for t := 0; t < max; t++ {
@@ -48,12 +48,14 @@ func writeFromCSVtoDB() {
 		saveToDB(l, r)
 	}
 }
-func dbConnect() {
+
+func DBConnect() *pg.DB {
 	db = pg.Connect(&pg.Options{
 		User:     "postgres",
 		Password: "123",
 		Database: "name_usa",
 	})
+	return db
 }
 func dbCreateTable() string {
 	db.Exec("DROP TABLE ROWS;")
@@ -77,22 +79,53 @@ func dbCreateTable() string {
 	db.Exec(`create index idx_id on rows(id)`)
 	return "OK"
 }
-func dbGetAll() []Row {
-	defer elapsed(time.Now(), "dbGetAll")
+func DBGetAll() []Row {
+	defer Elapsed(time.Now(), "dbGetAll")
 	var rows []Row
 	err := db.Model(&rows).Select()
 	if err != nil {
 		panic(err)
 	}
+	allRows = rows
 	return rows
 }
 
 func dbFindByNameAndYearOfBirth(s string, i int) []Row {
-	defer elapsed(time.Now(), "dbFindByNameAndYearOfBirth")
+	defer Elapsed(time.Now(), "dbFindByNameAndYearOfBirth")
 	var rows []Row
 	err := db.Model(&rows).Where("name = ? AND year_of_birth = ?", s, i).Select()
 	if err != nil {
 		panic(err)
 	}
 	return rows
+}
+
+func readNameCSV() string {
+	defer Elapsed(time.Now(), "readNameCSV")
+	records = readCsvFile("data/name.csv")
+	fmt.Println("Length of records", len(records))
+	return "OK"
+}
+func DBBuildTrie(rows []Row) Node {
+	defer Elapsed(time.Now(), "dbBuildTrie")
+	all := []struct {
+		string
+		int
+	}{}
+	for _, row := range rows {
+		for j, _ := range row.Name {
+			all = append(all, struct {
+				string
+				int
+			}{row.Name[j:], row.Id})
+		}
+	}
+
+	for _, s := range all {
+		start := &Root
+		for _, char := range s.string {
+			start = AddNodeTrie(start, char, s.int)
+		}
+	}
+	return Root
 }
