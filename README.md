@@ -5,7 +5,7 @@
   Postgresql and [go-pq](https://github.com/go-pg/pg) package.
   
 ## Performance
-  * With the use of Trie, I achieved 4X performance of 2.5 ms with Trie:
+  * With the use of Trie, I achieved faster performance of 2.5 ms with Trie:
  
       ![Query with trie](./query_wtrie.png)
 
