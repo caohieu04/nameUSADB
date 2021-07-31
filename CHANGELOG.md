@@ -15,11 +15,11 @@
   * Moved ./name.csv to ./data/name.csv
 
 ❤️ Removed:
-  Auto get function's name (unnecessary)
+  * Auto get function's name (unnecessary)
 
 🧊 v.1.0.0 
 ==========================================
 
 💚 Added:
-  Created database by bulk importing from name.csv and created indexes on `name` columns
-  Built `Trie` for fast retrieving
+  * Created database by bulk importing from name.csv and created indexes on `name` columns
+  * Built `Trie` for fast retrieving
